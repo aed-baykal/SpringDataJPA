@@ -6,14 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.gb.springdatajpa.model.Product;
 
 import javax.persistence.PersistenceContext;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
-public class ProductRepository {
+public class ProductRepository{
 
     @PersistenceContext
     private Session session;
+
+    ProductRepository productRepository;
 
     @Transactional(readOnly = true)
     public List<Product> findAll() {
