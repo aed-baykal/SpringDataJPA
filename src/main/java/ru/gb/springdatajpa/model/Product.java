@@ -23,5 +23,5 @@ public class Product {
     private String title;
 
     @Column(name = "price")
-    private Integer price;
+    private Float price;
 }

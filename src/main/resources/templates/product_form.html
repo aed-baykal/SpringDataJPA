@@ -4,20 +4,26 @@
     <title>Форма добавления продукта </title>
 </head>
 <body>
-<h1>Форма добавления продукта</h1>
-<form method="post" th:action="@{/add}">
+<h1 th:text="#{title.product.form}">Форма добавления продукта</h1>
+<form method="post" th:action="@{/add}" th:object="${productDto}">
     <label>
         id
-        <input type="number" name="id">
+        <input type="number" name="id" th:field="*{id}">
     </label>
     <label>
         title
-        <input type="text" name="title">
+        <input type="text" name="title" th:field="*{title}">
     </label>
+    <br>
+    <div th:each="err : ${#fields.errors('title')}" th:text="${err}" class="alert alert-danger">
+    </div>
     <label>
         cost
-        <input type="number" name="cost">
+        <input type="number" name="price" th:field="*{price}">
     </label>
+    <br>
+    <div th:each="err : ${#fields.errors('price')}" th:text="${err}" class="alert alert-danger">
+    </div>
     <button type="submit">Сохранить</button>
 </form>
 </body>

@@ -4,12 +4,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.gb.springdatajpa.model.Product;
+import ru.gb.springdatajpa.converter.ProductConverter;
+import ru.gb.springdatajpa.dto.ProductDto;
 import ru.gb.springdatajpa.service.ProductService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -32,7 +35,7 @@ public class ProductController {
                 && ((page + Integer.parseInt(param)) <= productService.findAll(pageable).getTotalPages()))
             page = page + Integer.parseInt(param);
         pageable = PageRequest.of(page, PAGE_SIZE);
-        List<Product> page = productService.findAll(pageable).stream().toList();
+        List<ProductDto> page = productService.findAll(pageable).stream().map(ProductConverter::productToProductDto).toList();
         model.addAttribute("products", page);
         return "product_list";
     }
@@ -46,14 +49,18 @@ public class ProductController {
 
     // http://localhost:8080/app/add GET
     @GetMapping("/add")
-    public String getProductAddFrom() {
+    public String getProductAddFrom(Model model) {
+        model.addAttribute("productDto", new ProductDto());
         return "product_form";
     }
 
     // http://localhost:8080/app/add POST
     @PostMapping("/add")
-    public String saveProduct(Product product) {
-        productService.save(product);
+    public String saveProduct(@Valid ProductDto productDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "product_form";
+        }
+        productService.save(ProductConverter.productDtoToProduct(productDto));
         return "redirect:/all";
     }
 

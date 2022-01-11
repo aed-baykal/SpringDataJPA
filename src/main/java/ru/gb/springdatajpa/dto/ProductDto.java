@@ -1,19 +1,24 @@
 package ru.gb.springdatajpa.dto;
 
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.gb.springdatajpa.model.Product;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 public class ProductDto {
 
-    private String title;
-    private String price;
+    private Long id;
 
-    public ProductDto(Product product) {
-        title = product.getTitle();
-        price = product.getPrice().toString();
-    }
+    @NotNull
+    @NotEmpty(message = "{validation.NotEmpty.message}")
+    private String title;
+
+    @Min(value = 0, message = "{validation.Min.message}")
+    private Float price;
 
 }
