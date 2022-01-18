@@ -28,7 +28,7 @@ public class ProductRestController {
 
     // http://localhost:8080/app/products GET
     @GetMapping("/")
-    public List<ProductDto> getAllStudents() {
+    public List<ProductDto> getAllProducts() {
         return productService.findAll().stream().map(ProductConverter::productToProductDto).toList();
     }
 
