@@ -1,9 +1,23 @@
-create table product
-(
+create table if not exists cart (
+    id bigserial primary key,
+    login varchar(255)
+);
+
+create table if not exists purchase (
+    id bigserial primary key,
+    product_id bigint,
+    price float,
+    cart_id bigint references cart (id)
+);
+
+create table if not exists product (
     id bigserial primary key,
     title varchar(255),
-    price int
+    price float
 );
+
+insert into cart (login)
+values ('Andrey');
 
 insert into product(title, price)
 values ('product1', 100),

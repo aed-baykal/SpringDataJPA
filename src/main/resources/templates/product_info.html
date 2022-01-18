@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Инфо о продукте </title>
+</head>
+<body>
+<h3 th:text="#{title.product.info}">Это информация о продукте</h3>
+<table>
+    <thead>
+    <tr>
+        <td>id</td>
+        <td>Название</td>
+        <td>Стоимость</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${product.id}"></td>
+        <td th:text="${product.title}"></td>
+        <td th:text="${product.price}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
