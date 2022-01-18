@@ -14,10 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cart")
-public class CartRestPurchase {
+public class CartRestController {
     private final CartServise cartServise;
 
-    public CartRestPurchase(CartServise cartServise) {
+    public CartRestController(CartServise cartServise) {
         this.cartServise = cartServise;
     }
 
