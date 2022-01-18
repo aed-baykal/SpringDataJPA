@@ -24,6 +24,7 @@ public class ProductConverter {
     Product product = new Product();
     product.setTitle(productDto.getTitle());
     product.setPrice(productDto.getPrice());
+    product.setId(productDto.getId());
 
     return product;
   }

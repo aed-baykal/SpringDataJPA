@@ -64,6 +64,13 @@ public class ProductController {
         return "redirect:/all";
     }
 
+    // http://localhost:8080/app/change/3 GET
+    @GetMapping("/change/{id}")
+    public String getProductChangeFrom(@PathVariable Long id, Model model) {
+        model.addAttribute("productDto", ProductConverter.productToProductDto(productService.findById(id)));
+        return "product_form";
+    }
+
     // http://localhost:8080/app/delete/3 POST
     @PostMapping("/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
