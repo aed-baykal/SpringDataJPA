@@ -13,24 +13,30 @@ public class Cart {
     private double price;
 
     public void addItem(CartItem cartItem) {
-        items.stream().filter(items -> items.getProductId().equals(cartItem.getProductId())).findFirst()
-                .ifPresentOrElse(CartItem::incrementCount, () -> items.add(cartItem));
+        boolean flag = true;
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getProductId().equals(cartItem.getProductId())) {
+                items.get(i).incrementCount();
+                flag = false;
+            }
+        }
+        if (flag) items.add(cartItem);
         recalculate();
     }
 
     public void removeItem(Long id) {
-        items.stream().filter(items -> items.getProductId().equals(id)).findFirst()
-                .ifPresent(
-                        item -> {
-                            item.decrementCount();
-                            if (item.getCount() == 0) {
-                                items.remove(item);
-                            }
-                        }
-                );
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getProductId().equals(id)) {
+                items.get(i).decrementCount();
+                if (items.get(i).getCount() == 0) items.remove(items.get(i));
+            }
+        }
         recalculate();
     }
     private void recalculate() {
-        price = items.stream().mapToDouble(CartItem::getPrice).sum();
+        price = 0;
+        for (int i = 0; i < items.size(); i++) {
+            price = price + items.get(i).getPrice();
+        }
     }
 }
