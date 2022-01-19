@@ -1,7 +1,10 @@
 package ru.gb.springdatajpa.converter;
 
+import ru.gb.springdatajpa.dto.CartItem;
 import ru.gb.springdatajpa.dto.ProductDto;
 import ru.gb.springdatajpa.model.Product;
+
+import java.util.Optional;
 
 public class ProductConverter {
 
@@ -17,6 +20,18 @@ public class ProductConverter {
     return productDto;
   }
 
+  public static CartItem productToCartItem(Optional<Product> optionalProduct) {
+    Product product = optionalProduct.orElse(null);
+    CartItem cartItem = new CartItem();
+    if (product != null) {
+      cartItem.setProductId(product.getId());
+      cartItem.setTitle(product.getTitle());
+      cartItem.setPricePerOne(product.getPrice());
+      cartItem.setPrice(product.getPrice());
+    }
+    return cartItem;
+  }
+
   public static Product productDtoToProduct(ProductDto productDto) {
     if (productDto == null) {
       return null;
@@ -24,6 +39,7 @@ public class ProductConverter {
     Product product = new Product();
     product.setTitle(productDto.getTitle());
     product.setPrice(productDto.getPrice());
+    product.setId(productDto.getId());
 
     return product;
   }

@@ -1,55 +1,41 @@
 package ru.gb.springdatajpa.controller;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.gb.springdatajpa.dto.CartItem;
 import ru.gb.springdatajpa.model.Cart;
-import ru.gb.springdatajpa.model.Purchase;
-import ru.gb.springdatajpa.service.CartServise;
+import ru.gb.springdatajpa.service.CartService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/cart/rest")
 public class CartRestController {
-    private final CartServise cartServise;
+    private final CartService cartService;
 
-    public CartRestController(CartServise cartServise) {
-        this.cartServise = cartServise;
+    public CartRestController(CartService cartService) {
+        this.cartService = cartService;
     }
 
-    // http://localhost:8080/app/cart GET
-    @GetMapping("/")
-    public List<Cart> getAllCart() {
-        return cartServise.findAll().stream().toList();
+    @GetMapping("/all_items")
+    public List<CartItem> getAllCartItemsForCurrentUser(){return cartService.getCartForCurrnetUser().getItems();}
+    @GetMapping// GET cart
+    public Cart getCart() {
+        return cartService.getCartForCurrnetUser();
     }
 
-    // http://localhost:8080/app/cart/info/1 GET
-    @GetMapping("/info/{id}")
-    public Cart getCartInfo(@PathVariable Long id) {
-        return cartServise.findById(id);
+    @PostMapping("/add/{id}") // POST cart/product/add/1
+    public Cart addProduct(@PathVariable Long id) {
+        return cartService.addProductById(id);
     }
 
-    // http://localhost:8080/app/cart/purchase_info/1 GET
-    @GetMapping("/purchase_info/{id}")
-    public List<Purchase> getCartPurchasesInfo(@PathVariable Long id) {
-        return cartServise.findById(id).getPurchasesList();
-    }
-
-    // http://localhost:8080/app/cart/add POST
-    @PostMapping("/add")
-    public Cart saveCart(@RequestBody Cart cart) {
-        cartServise.save(cart);
-        return cart;
-    }
-
-    // http://localhost:8080/app/cart/delete/1 GET
-    @GetMapping("/delete/{id}")
-    public void deleteCartById(@PathVariable Long id) {
-        cartServise.deleteById(id);
+    @DeleteMapping("/del/{id}") // DELETE cart/product/del/1
+    public Cart deleteProduct(@PathVariable Long id) {
+        return cartService.removeProductById(id);
     }
 
 }

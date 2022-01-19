@@ -4,7 +4,7 @@
     <title>Форма добавления продукта </title>
 </head>
 <body>
-<h1 th:text="#{title.product.form}">Форма добавления продукта</h1>
+<h1 th:text="#{title.product.form}">Форма добавления/изменения продукта</h1>
 <form method="post" th:action="@{/add}" th:object="${productDto}">
     <label>
         id
