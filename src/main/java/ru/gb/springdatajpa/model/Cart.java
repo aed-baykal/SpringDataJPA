@@ -1,31 +1,36 @@
 package ru.gb.springdatajpa.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
+import ru.gb.springdatajpa.dto.CartItem;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "cart")
 @Data
 public class Cart {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private List<CartItem> items = new ArrayList<>();
+    private double price;
 
-    @Column
-    private String login;
+    public void addItem(CartItem cartItem) {
+        items.stream().filter(items -> items.getProductId().equals(cartItem.getProductId())).findFirst()
+                .ifPresentOrElse(CartItem::incrementCount, () -> items.add(cartItem));
+        recalculate();
+    }
 
-    @OneToMany(mappedBy = "cart")
-    @JsonBackReference
-    private List<Purchase> purchasesList;
-
+    public void removeItem(Long id) {
+        items.stream().filter(items -> items.getProductId().equals(id)).findFirst()
+                .ifPresent(
+                        item -> {
+                            item.decrementCount();
+                            if (item.getCount() == 0) {
+                                items.remove(item);
+                            }
+                        }
+                );
+        recalculate();
+    }
+    private void recalculate() {
+        price = items.stream().mapToDouble(CartItem::getPrice).sum();
+    }
 }

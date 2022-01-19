@@ -27,6 +27,12 @@
             <td th:text="${product.id}">1</td>
             <td th:text="${product.title}">prod1</td>
             <td th:text="${product.price}">10</td>
+            <td><form method="get" th:action="@{${'/cart/add/' + product.id}}">
+                <button type="submit" class="btn btn-warning">"+"</button>
+            </form></td>
+            <td><form method="post" th:action="@{${'/cart/del/' + product.id}}">
+                <button type="submit" class="btn btn-warning">"-"</button>
+            </form></td>
             <td><form method="get" th:action="@{${'/change/' + product.id}}">
                 <button type="submit" class="btn btn-warning">change</button>
             </form></td>
